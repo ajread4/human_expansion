@@ -27,7 +27,7 @@ class SpawnShell(BaseWorkflow):
     """ PRIVATE """
 
     def _spawn_shell_and_quit(self):
-        p = subprocess.Popen(self._determine_os_shell_command(), shell=True)
+        p = subprocess.Popen("cmd.exe /C " + self._determine_os_shell_command(), shell=True)
         sleep(5)
         p.kill()
 
