@@ -19,10 +19,10 @@ class SpawnShell(BaseWorkflow):
 
     def __init__(self):
         super().__init__(name=WORKFLOW_NAME, description=WORKFLOW_DESCRIPTION)
+        self.os_command_list = self._load_os_command_list()
 
     def action(self, extra=None):
         self._spawn_shell_and_quit()
-        self.os_command_list = self._load_os_command_list()
 
     """ PRIVATE """
 
