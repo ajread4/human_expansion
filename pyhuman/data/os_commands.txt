@@ -22,6 +22,8 @@ cd "C:\Windows\Performance"
 cd "C:\Windows\Prefetch"
 cd "C:\Windows\Temp"
 cd "C:\Windows\SysWOW64"
+mkdir "C:\Users\IEUser\tmp"
+rmdir "C:\Users\IEUser\tmp"
 chkdsk
 cipher
 cls

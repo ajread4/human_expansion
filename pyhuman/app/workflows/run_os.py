@@ -7,26 +7,26 @@ import random
 from ..utility.base_workflow import BaseWorkflow
 
 
-WORKFLOW_NAME = 'Spawn Shell'
-WORKFLOW_DESCRIPTION = 'Spawn shell and run commands'
+WORKFLOW_NAME = 'Run OS Commands'
+WORKFLOW_DESCRIPTION = 'Run random OS commands within cmd.exe to emulate a user'
 
 
 def load():
-    return SpawnShell()
+    return RunOS()
 
 
-class SpawnShell(BaseWorkflow):
+class RunOS(BaseWorkflow):
 
     def __init__(self):
         super().__init__(name=WORKFLOW_NAME, description=WORKFLOW_DESCRIPTION)
         self.os_command_list = self._load_os_command_list()
 
     def action(self, extra=None):
-        self._spawn_shell_and_quit()
+        self._spawn_cmd_and_quit()
 
     """ PRIVATE """
 
-    def _spawn_shell_and_quit(self):
+    def _spawn_cmd_and_quit(self):
         p = subprocess.Popen("cmd.exe /C " + self._determine_os_shell_command(), shell=True)
         sleep(5)
         p.kill()
@@ -48,9 +48,3 @@ class SpawnShell(BaseWorkflow):
                 os_command.append(line)
         return os_command
 
-if __name__=='__main__':
-    try:
-        ShellTest=SpawnShell()
-        ShellTest.action()
-    except Exception as err:
-        print(repr(err))

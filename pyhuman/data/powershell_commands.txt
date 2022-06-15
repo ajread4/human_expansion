@@ -1,0 +1,10 @@
+get-process
+get-service
+get-netadapter
+systeminfo
+whoami
+get-executionpolicy
+$PSVersionTable
+get-installedmodule
+Get-Module -ListAvailable
+get-command
