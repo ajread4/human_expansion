@@ -1,0 +1,122 @@
+dir
+cd
+type test.txt
+arpa -a
+schtasks.exe
+cmd.exe
+attrib
+chcp
+chdir
+chgport
+cd "C:\"
+cd "C:\Users"
+cd "C:\Windows"
+cd "C:\Windows\System32"
+cd "C:\Windows\System"
+cd "C:\Windows\debug"
+cd "C:\Windows\diagnostics"
+cd "C:\Windows\en-US"
+cd "C:\Windows\Logs"
+cd "C:\Windows\Intel"
+cd "C:\Windows\Performance"
+cd "C:\Windows\Prefetch"
+cd "C:\Windows\Temp"
+cd "C:\Windows\SysWOW64"
+chkdsk
+cipher
+cls
+cmdkey /list
+color
+comp notepad.exe notepad.exe
+comp notepad.exe xcopy.exe
+date
+defrag
+dism
+doskey
+driverquery
+echo "Hello World"
+echo "This is a test"
+echo "Human expansion"
+eventcreate /?
+exit
+find "hello" test.txt
+findstr "hello" test.txt
+fltmc
+format
+getmac
+ftype
+gpresult
+help
+hostname
+icacls "C:\Windows"
+icacls "C:\Windows\System32"
+ipconfig
+ipconfig /all
+klist
+label
+logman
+mkdir "C:\Users\human\files1"
+mkdir "C:\Users\human\files2"
+mkdir "C:\Users\human\files3"
+mkdir "C:\Users\human\files4"
+mkdir "C:\Users\human\files5"
+mkdir "C:\Users\human\files6"
+mkdir "C:\Users\human\files7"
+mode
+mrinfo
+net share
+net user
+net file
+net accounts
+net config
+net statistics
+net use
+net
+net localgroup
+net help
+netstat
+netstat -antp
+nslookup
+path
+pathping 8.8.8.8
+tracert 8.8.8.8
+ping 8.8.8.8
+powercfg /list
+powercfg /aliases
+print test.txt
+qprocess
+quser
+REG QUERY HKLM\Software /ve
+REG QUERY HKLM\Software
+reg query HKLM /f SYSTEM /t REG_SZ /c /e
+reg query HKCU /f 0F /d /t REG_BINARY
+reg query HKLM\SOFTWARE\Microsoft /s /f asp.net
+reg query HKLM\SOFTWARE\Microsoft /s /f asp.net /k
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
+rename "C:\Users\human\files1\test.txt" "C:\Users\human\files1\test1.txt"
+rename "C:\Users\human\files2\test2.txt" "C:\Users\human\files3\test3.txt"
+route PRINT
+route PRINT -4
+route PRINT -6
+sc query
+sc query eventlog
+sc queryex eventlog
+schtasks
+schtasks /Query
+set
+setlocal
+start
+systeminfo
+tasklist
+time
+title
+tree
+tree /A
+tree /F
+type "C:\Windows\System32\notepad.exe"
+type "C:\Windows\System32\notepad.exe"
+tzutil /g
+ver
+vol
+where notepad.exe
+whoami

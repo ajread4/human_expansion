@@ -11,7 +11,6 @@ WORKFLOW_DESCRIPTION = 'Select a random website and browse'
 
 DEFAULT_INPUT_WAIT_TIME = 2
 
-
 def load():
     driver = WebDriverHelper()
     return WebBrowse(driver=driver)
