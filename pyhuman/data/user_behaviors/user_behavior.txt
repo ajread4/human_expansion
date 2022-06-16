@@ -1,0 +1,8 @@
+1. Create a file within a directory.
+2. Create a directory within a directory.
+3. Move a file within a directory.
+4. Move a directory within a directory.
+5. Delete a file from a directory.
+6. Delete a directory from a directory.
+7. Modify a file within a directory.
+8. Modify a directory.
