@@ -1,4 +1,4 @@
-os_commands.txtimport subprocess
+import subprocess
 import sys
 from time import sleep
 import os
