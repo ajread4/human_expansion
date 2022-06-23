@@ -33,39 +33,52 @@ class RunUser(BaseWorkflow):
 
     def _determine_behavior(self):
         chosen_behavior=self._get_random_behavior()
-        if chosen_behavior==1:
+        if chosen_behavior==1: #Create a file within a directory.
             f,_,w=self._load_behavior()
             return 'type ' + w + ' > ' + 'C:\\Users\\IEUser\\Documents\\'+ f
-        elif chosen_behavior==2:
+        elif chosen_behavior==2: #Create a directory within a directory.
             _, d, _ = self._load_behavior()
             return 'mkdir C:\\Users\\IEUser\\Documents\\' + d
-        elif chosen_behavior==3:
+        elif chosen_behavior==3: #Move a file within a directory.
             original_file, _, _ = self._load_behavior()
             new_file, _, _ = self._load_behavior()
             return 'move C:\\Users\\IEUser\\Documents\\' + original_file + 'C:\\Users\\IEUser\\Documents\\' +new_file
-        elif chosen_behavior == 4:
+        elif chosen_behavior == 4: #Move a directory within a directory.
             original_dir, _, _ = self._load_behavior()
             new_dir, _, _ = self._load_behavior()
             return 'move C:\\Users\\IEUser\\Documents\\' + original_dir + 'C:\\Users\\IEUser\\Desktop' + new_dir
-        elif chosen_behavior == 5:
+        elif chosen_behavior == 5: #Delete a file from a directory.
             f, _, _ = self._load_behavior()
             return 'del C:\\Users\\IEUser\\Documents\\' + f
-        elif chosen_behavior == 6:
+        elif chosen_behavior == 6: #Delete a directory from a directory.
             _, d, _ = self._load_behavior()
             return 'rmdir /S C:\\Users\\IEUser\\Documents\\' + d
-        elif chosen_behavior == 7:
+        elif chosen_behavior == 7: #Modify a file within a directory.
             f,_,w=self._load_behavior()
             return 'echo ' + w + ' > ' + 'C:\\Users\\IEUser\\Documents\\'+ f
-        elif chosen_behavior == 8:
+        elif chosen_behavior == 8:# Modify a directory.
             original_dir, _, _ = self._load_behavior()
             new_dir, _, _ = self._load_behavior()
             return 'move C:\\Users\\IEUser\\Desktop\\' + original_dir + 'C:\\Users\\IEUser\\Documents\\' + new_dir
-        else:
+        else: #if there isnt a correct behavior chosen
             print(f'Incorrect chosen behavior: {chosen_behavior}')
 
     def _get_random_behavior(self):
         return random.choice(list(self.userbehavior.keys()))
 
+    def _check_file_exist(self,input_file):
+        with open('../../data/created_files.txt') as f:
+            if input_file in f.read():
+                return False
+            else:
+                return True 
+
+    def _check_dir_exist(self,input_dir):
+        with open('../../data/created_dirs.txt') as d:
+            if input_dir in d.read():
+                return False
+            else:
+                return True
     @staticmethod
     def _load_behavior():
         random_file=random.choice(open('../../data/file_options.txt').read().splitlines())
