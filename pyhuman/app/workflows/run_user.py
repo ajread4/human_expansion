@@ -8,7 +8,7 @@ from ..utility.base_workflow import BaseWorkflow
 
 
 WORKFLOW_NAME = 'Run User activity'
-WORKFLOW_DESCRIPTION = 'Run user activity to interact with host operating system'
+WORKFLOW_DESCRIPTION = 'Run user activity to interact with host operating system via command line (cmd.exe)'
 
 
 def load():
@@ -75,7 +75,8 @@ class RunUser(BaseWorkflow):
         return random.choice(list(self.userbehavior.keys()))
 
     def _check_file_exist(self,input_file):
-        with open('../../data/created_files.txt','w') as f:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_files.txt')), 'w') as f:
             if input_file in f.read():
                 return True
             else:
@@ -83,27 +84,27 @@ class RunUser(BaseWorkflow):
                 return False
 
     def _check_dir_exist(self,input_dir):
-        with open('../../data/created_dirs.txt','w') as d:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_dirs.txt')), 'w') as d:
             if input_dir in d.read():
                 return True
             else:
                 d.write(input_dir)
                 return False
 
-
     @staticmethod
     def _load_behavior():
-        random_file=random.choice(open('../../data/file_options.txt').read().splitlines())
-        random_dir = random.choice(open('../../data/dir_options.txt').read().splitlines())
-        random_words=random.choice(open('../../data/echo_words.txt').read().splitlines())
+        random_file=random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'file_options.txt')), 'r').read().splitlines())
+        random_dir = random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'dir_options.txt')), 'r').read().splitlines())
+        random_words=random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'echo_words.txt')), 'r').read().splitlines())
         return random_file,random_dir,random_words
 
     @staticmethod
     def _retrieve_file():
-        return random.choice(open('../../data/created_files.txt').read().splitlines())
+        return random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'created_files.txt')), 'r').read().splitlines())
     @staticmethod
     def _retrieve_dir():
-        return random.choice(open('../../data/created_dirs.txt').read().splitlines())
+        return random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'created_dirs.txt')), 'r').read().splitlines())
 
 
 
