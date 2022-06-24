@@ -5,4 +5,3 @@
 5. Delete a file from a directory.
 6. Delete a directory from a directory.
 7. Modify a file within a directory.
-8. Modify a directory. 
