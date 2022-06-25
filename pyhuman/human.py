@@ -5,6 +5,7 @@ import random
 import sys
 from importlib import import_module
 from time import sleep
+from pathlib import PureWindowsPath
 
 
 TASK_CLUSTER_COUNT = 5
@@ -22,6 +23,14 @@ def emulation_loop(workflows, clustersize, taskinterval, taskgroupinterval, extr
             workflows[index].action(extra)
         sleep(random.randrange(taskgroupinterval))
 
+def baseline():
+    print("Baselining Directories")
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'created_files.txt')), 'w') as f,open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'created_dirs.txt')), 'w') as d:
+        for root,dir,file in os.walk(PureWindowsPath("C:\\Users\\cptadmin\\Documents\\")):
+            for files in file:
+                f.write(os.path.join(root,files)+'\n')
+            for dirs in dir:
+                d.write(os.path.join(root,dirs)+'\n')
 
 def import_workflows():
     extensions = []
@@ -30,7 +39,8 @@ def import_workflows():
         dirs[:] = [d for d in dirs if not d[0] == '.' and not d[0] == "_"]
         for file in files:
             try:
-                extensions.append(load_module('app/workflows', file))
+                #extensions.append(load_module('app/workflows', file))
+                extensions.append(load_module('app/workflows', 'run_user.py'))
             except Exception as e:
                 print('Error could not load workflow. {}'.format(e))
     return extensions
@@ -44,6 +54,7 @@ def load_module(root, file):
 
 def run(clustersize, taskinterval, taskgroupinterval, extra):
     random.seed()
+    baseline()
     workflows = import_workflows()
 
     def signal_handler(sig, frame):

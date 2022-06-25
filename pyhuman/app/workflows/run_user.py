@@ -3,6 +3,7 @@ import sys
 from time import sleep
 import os
 import random
+from pathlib import Path, PureWindowsPath
 
 from ..utility.base_workflow import BaseWorkflow
 
@@ -20,7 +21,7 @@ class RunUser(BaseWorkflow):
         self.userbehavior={1:'Create a file within a directory',2:'Create a directory within a directory.',
                            3:'Move a file within a directory.',4:'Move a directory within a directory.',5:'Delete a file from a directory.',
                            6:'Delete a directory from a directory.',7:'Modify a file within a directory.'}
-
+        self.root_path=PureWindowsPath("C:\\Users\\cptadmin\\Documents\\")
     def action(self, extra=None):
         self._run_user_and_quit()
 
@@ -35,63 +36,93 @@ class RunUser(BaseWorkflow):
         chosen_behavior=self._get_random_behavior()
         if chosen_behavior==1: #Create a file within documents directory
             f,_,w=self._load_behavior()
-            return 'echo ' + w + ' > ' + 'C:\\Users\\IEUser\\Documents\\'+ f
+            print(f'Creating file named {f} with content {w} in the Documents directory')
+            self._write_file(str(self.root_path.joinpath(f)))
+            return '\"echo ' + w + ' > ' + str(self.root_path.joinpath(f)) + '\"'
         elif chosen_behavior==2: #Create a directory within documents directory.
             _, d, _ = self._load_behavior()
-            return 'mkdir C:\\Users\\IEUser\\Documents\\' + d
+            print(f'Creating directory named {d} in the Documents directory')
+            self._write_dir(str(self.root_path.joinpath(d)))
+            return '\"mkdir ' + str(self.root_path.joinpath(d)) + "\""
         elif chosen_behavior==3: #Move a file within documents directory.
             original_file, _, w = self._load_behavior()
             new_file, _, _ = self._load_behavior()
+            print(f'Moving file named {original_file} in the Documents directory to {new_file}')
             if not (self._check_file_exist(original_file)):
-                make_p = subprocess.Popen("cmd.exe /C echo " + w + " >  C:\\Users\\IEUser\\Documents\\" + original_file, shell=True)
+                make_p = subprocess.Popen("cmd.exe /C \"echo " + w + " > " + str(self.root_path.joinpath(original_file)) + "\"", shell=True)
                 sleep(2)
                 make_p.kill()
-            return 'move C:\\Users\\IEUser\\Documents\\' + original_file + 'C:\\Users\\IEUser\\Documents\\' +new_file
+                self._write_file(str(self.root_path.joinpath(original_file)))
+            self._write_file(str(self.root_path.joinpath(new_file)))
+            return '\"move ' + str(self.root_path.joinpath(original_file)) + ' ' + str(self.root_path.joinpath(new_file)) + "\""
         elif chosen_behavior == 4: #Move a directory within another documents directory.
             _, firstdir, _ = self._load_behavior()
             _, seconddir, _ = self._load_behavior()
+            print(f'Moving directory named {firstdir} to {seconddir} in the documents directory')
             if not (self._check_dir_exist(firstdir)):
-                make_p = subprocess.Popen("cmd.exe /C mkdir C:\\Users\\IEUser\\Documents\\" + firstdir, shell=True)
+                make_p = subprocess.Popen("cmd.exe /C \"mkdir " + str(self.root_path.joinpath(firstdir)) + "\"", shell=True)
                 sleep(2)
                 make_p.kill()
-            return 'mkdir C:\\Users\\IEUser\\Documents\\' + firstdir + "\\"+ seconddir
+                self._write_dir(str(self.root_path.joinpath(firstdir)))
+            self._write_dir(str(self.root_path.join(seconddir)))
+            return '\"mkdir ' + str(self.root_path.joinpath(firstdir,seconddir)) + "\""
         elif chosen_behavior == 5: #Delete a file from documents directory.
-            f=self._retrieve_file()
-            return 'del C:\\Users\\IEUser\\Documents\\' + f
+            if (self._created_files_status()):
+                f=self._retrieve_file()
+                print(f'Deleting file {f} in Documents')
+                return '\"del ' +str(self.root_path.joinpath(f)) + "\""
+            else:
+                return 'echo Human'
         elif chosen_behavior == 6: #Delete a directory from a directory.
-            d=self._retrieve_file()
-            return 'rmdir /S C:\\Users\\IEUser\\Documents\\' + d
+            if (self._created_dir_status()):
+                d=self._retrieve_dir()
+                print(f'Deleting directory {d} within Documents')
+                return '\"rmdir /S ' + str(self.root_path.joinpath(d)) + "\""
+            else:
+                return 'echo Human'
         elif chosen_behavior == 7: #Modify a file within documents directory
-            f,_,w=self._load_behavior()
-            if not (self._check_file_exist(f)):
-                make_p = subprocess.Popen("cmd.exe /C echo " + w + " >  C:\\Users\\IEUser\\Documents\\" + f, shell=True)
-                sleep(2)
-                make_p.kill()
-            return 'echo ' + w + ' > ' + 'C:\\Users\\IEUser\\Documents\\'+ f
+            if (self._created_files_status()):
+                f,_,w=self._load_behavior()
+                print(f'Modifying file {f} with content {w} in Documents directory')
+                if not (self._check_file_exist(f)):
+                    make_p = subprocess.Popen("cmd.exe /C \"echo " + w + " > " + str(self.root_path.joinpath(f))+ "\"", shell=True)
+                    sleep(2)
+                    make_p.kill()
+                    self._write_file(str(self.root_path.joinpath(f)))
+                return '\"echo ' + w + ' > ' + str(self.root_path.joinpath(f)) + "\""
+            else:
+                return 'echo Human'
         else: #if there isnt a correct behavior chosen
             print(f'Incorrect chosen behavior: {chosen_behavior}')
 
     def _get_random_behavior(self):
-        return random.choice(list(self.userbehavior.keys()))
+        #return random.choice(list(self.userbehavior.keys())) #if only want random probabilities for interactions
+        return random.choices(list(self.userbehavior.keys()),weights=(30,30,15,5,5,5,10),k=1)[0] #if want weighted probabilities
 
     def _check_file_exist(self,input_file):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
-                                               'data', 'created_files.txt')), 'w') as f:
-            if input_file in f.read():
-                return True
-            else:
-                f.write(input_file)
-                return False
+                                               'data', 'created_files.txt')), 'r') as f:
+            for line in f.readlines():
+                if input_file == line.split("\\")[-1]:
+                    return True
+            return False
 
     def _check_dir_exist(self,input_dir):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
-                                               'data', 'created_dirs.txt')), 'w') as d:
-            if input_dir in d.read():
-                return True
-            else:
-                d.write(input_dir)
-                return False
+                                               'data', 'created_dirs.txt')), 'r') as d:
+            for line in d.readlines():
+                if input_dir in line.split("\\")[-1]:
+                    return True
+            return False
+    def _write_file(self,input_file):
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_files.txt')), 'a') as f:
+            f.write(input_file + "\n")
 
+    def _write_dir(self,input_dir):
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_dirs.txt')), 'a') as d:
+            d.write(input_dir + "\n")
     @staticmethod
     def _load_behavior():
         random_file=random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'file_options.txt')), 'r').read().splitlines())
@@ -100,11 +131,26 @@ class RunUser(BaseWorkflow):
         return random_file,random_dir,random_words
 
     @staticmethod
-    def _retrieve_file():
-        return random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'created_files.txt')), 'r').read().splitlines())
+    def _created_files_status():
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_files.txt')), 'r') as f:
+            if len(f.readlines())==0:
+                return False
+            else:
+                return True
+
+    @staticmethod
+    def _created_dir_status():
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
+                                               'data', 'created_dirs.txt')), 'r') as d:
+            if len(d.readlines())==0:
+                return False
+            else:
+                return True
     @staticmethod
     def _retrieve_dir():
         return random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'created_dirs.txt')), 'r').read().splitlines())
 
-
-
+    @staticmethod
+    def _retrieve_file():
+        return random.choice(open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','data', 'created_files.txt')), 'r').read().splitlines())
