@@ -1,1 +1,2 @@
-C:\Users\cptadmin\Documents\tcpdf_config.php
+/mnt/c/Users/cptadmin/Documents/desktop.ini
+/mnt/c/Users/cptadmin/Documents/Downloads/SpotifySetup.exe

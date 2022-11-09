@@ -1,1 +1,6 @@
-C:\Users\cptadmin\Documents\g
+/mnt/c/Users/cptadmin/Documents/Downloads
+/mnt/c/Users/cptadmin/Documents/My Music
+/mnt/c/Users/cptadmin/Documents/My Pictures
+/mnt/c/Users/cptadmin/Documents/My Videos
+/mnt/c/Users/cptadmin/Documents/Practice
+/mnt/c/Users/cptadmin/Documents/Tools

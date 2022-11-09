@@ -5,8 +5,8 @@ import random
 import sys
 from importlib import import_module
 from time import sleep
-from pathlib import PureWindowsPath
-
+from pathlib import PureWindowsPath, Path, PurePath
+import glob
 
 TASK_CLUSTER_COUNT = 5
 TASK_INTERVAL_SECONDS = 10
@@ -26,12 +26,11 @@ def emulation_loop(workflows, clustersize, taskinterval, taskgroupinterval, extr
 def baseline():
     print("Baselining Directories")
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'created_files.txt')), 'w') as f,open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'created_dirs.txt')), 'w') as d:
-        for root,dir,file in os.walk(PureWindowsPath("C:\\Users\\cptadmin\\Documents\\")):
+        for root,dir,file in os.walk("/mnt/c/Users/cptadmin/Documents/"):
             for files in file:
                 f.write(os.path.join(root,files)+'\n')
             for dirs in dir:
                 d.write(os.path.join(root,dirs)+'\n')
-
 def import_workflows():
     extensions = []
     for root, dirs, files in os.walk(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'app', 'workflows')):
